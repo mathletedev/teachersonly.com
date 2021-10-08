@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/client";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
 import Loading from "./Loading";
@@ -20,6 +21,17 @@ const Layout: FC = ({ children }) => {
 
 	useEffect(() => {
 		setNavHeight(navRef.current?.clientHeight || 0);
+	});
+
+	useEffect(() => {
+		if (
+			localStorage.theme === "dark" ||
+			(!("theme" in localStorage) &&
+				window.matchMedia("(prefers-color-scheme: dark)").matches)
+		)
+			return document.documentElement.classList.add("dark");
+
+		document.documentElement.classList.remove("dark");
 	});
 
 	if (loading) return <Loading />;
@@ -42,29 +54,32 @@ const Layout: FC = ({ children }) => {
 			{session ? (
 				<Fragment>
 					<nav
-						className="flex items-center gap-2 bg-indigo-200 h-12 px-4"
+						className="flex items-center gap-2 bg-indigo-200 h-12 px-4 dark:bg-gray-700"
 						ref={navRef}
 					>
-						<a
-							href="/"
+						<div
 							title="teachersonly.com"
-							className="text-lg text-indigo-500"
+							className="text-lg text-indigo-500 transition hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300"
 						>
-							teachersonly.com
-						</a>
+							<Link href="/">teachersonly.com</Link>
+						</div>
 						<button title="search">
 							<SearchIcon className="icon-button" />
 						</button>
 						<div className="flex-grow"></div>
-						<a href="/messages" title="messages">
-							<ChatIcon className="icon-button" />
-						</a>
+						<div title="messages" className="cursor-pointer">
+							<Link href="/messages">
+								<ChatIcon className="icon-button" />
+							</Link>
+						</div>
 						<button title="notifications">
 							<BellIcon className="icon-button" />
 						</button>
-						<a href="/settings" title="settings">
-							<CogIcon className="icon-button" />
-						</a>
+						<div title="settings" className="cursor-pointer">
+							<Link href="/settings">
+								<CogIcon className="icon-button" />
+							</Link>
+						</div>
 						<button onClick={() => signOut()} title="sign out">
 							<LogoutIcon className="icon-button" />
 						</button>

@@ -4,10 +4,14 @@
 
 body {
 	@apply bg-indigo-50;
+
+	@apply dark:bg-gray-900;
 }
 
 .text-default {
 	@apply text-gray-500;
+
+	@apply dark:text-gray-400;
 }
 
 .text-button {
@@ -28,6 +32,9 @@ body {
 
 	@apply transition;
 	@apply hover:text-indigo-600;
+
+	@apply dark:text-indigo-400;
+	@apply dark:hover:text-indigo-300;
 }
 
 .sidebar-item {
@@ -41,10 +48,15 @@ body {
 
 	@apply transition;
 	@apply hover:bg-indigo-200;
+
+	@apply dark:text-gray-400;
+	@apply dark:hover:bg-gray-700;
 }
 
 .sidebar-item svg {
 	@apply h-5;
 	@apply w-5;
 	@apply text-gray-500;
+
+	@apply dark:text-gray-400;
 }
