@@ -2,7 +2,6 @@ import {
 	BellIcon,
 	ChatIcon,
 	CogIcon,
-	HomeIcon,
 	LogoutIcon,
 	SearchIcon
 } from "@heroicons/react/outline";
@@ -46,16 +45,20 @@ const Layout: FC = ({ children }) => {
 						className="flex items-center gap-2 bg-indigo-200 h-12 px-4"
 						ref={navRef}
 					>
-						<a href="/dash" title="dashboard">
-							<HomeIcon className="icon-button" />
-						</a>
-						<a href="/messages" title="messages">
-							<ChatIcon className="icon-button" />
+						<a
+							href="/"
+							title="teachersonly.com"
+							className="text-lg text-indigo-500"
+						>
+							teachersonly.com
 						</a>
 						<button title="search">
 							<SearchIcon className="icon-button" />
 						</button>
 						<div className="flex-grow"></div>
+						<a href="/messages" title="messages">
+							<ChatIcon className="icon-button" />
+						</a>
 						<button title="notifications">
 							<BellIcon className="icon-button" />
 						</button>
@@ -66,10 +69,7 @@ const Layout: FC = ({ children }) => {
 							<LogoutIcon className="icon-button" />
 						</button>
 					</nav>
-					<div
-						className="flex"
-						style={{ height: `calc(100vh - ${navHeight}px)` }}
-					>
+					<div style={{ height: `calc(100vh - ${navHeight}px)` }}>
 						{children}
 					</div>
 				</Fragment>

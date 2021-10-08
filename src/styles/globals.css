@@ -29,3 +29,12 @@ body {
 	@apply transition;
 	@apply hover:text-indigo-600;
 }
+
+.sidebar-item {
+	@apply text-gray-500;
+	@apply py-2;
+	@apply px-4;
+
+	@apply transition;
+	@apply hover:bg-indigo-200;
+}
