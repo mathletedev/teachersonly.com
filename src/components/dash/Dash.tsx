@@ -5,7 +5,7 @@ const Dash: FC = () => {
 	const [session] = useSession();
 
 	return (
-		<div className="m-auto text-default text-lg">
+		<div className="text-lg text-default">
 			hello, {session!.user?.name?.toLowerCase()}!
 		</div>
 	);

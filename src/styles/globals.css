@@ -31,10 +31,20 @@ body {
 }
 
 .sidebar-item {
+	@apply flex;
 	@apply text-gray-500;
+	@apply w-48;
 	@apply py-2;
 	@apply px-4;
+	@apply justify-start;
+	@apply items-center;
 
 	@apply transition;
 	@apply hover:bg-indigo-200;
+}
+
+.sidebar-item svg {
+	@apply h-5;
+	@apply w-5;
+	@apply text-gray-500;
 }
