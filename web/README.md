@@ -1,3 +1,3 @@
-# web
+# @teachersonly.com/web
 
-> The client side of teachersonly.com
+> Client side of teachersonly.com

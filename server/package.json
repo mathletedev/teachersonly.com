@@ -1,13 +1,12 @@
 {
-	"name": "@teachersonly.com/web",
+	"name": "@teachersonly.com/server",
 	"version": "0.1.0",
 	"description": "You don't have to be lonely, at teachersonly.com...",
 	"private": true,
+	"main": "dist/index.js",
 	"scripts": {
-		"dev": "next dev",
-		"build": "next build",
-		"start": "next start",
-		"lint": "next lint"
+		"watch": "tsc -w",
+		"dev": "nodemon ."
 	},
 	"repository": {
 		"type": "git",
@@ -23,19 +22,17 @@
 	},
 	"homepage": "https://github.com/mathletedev/teachersonly.com#readme",
 	"dependencies": {
-		"@heroicons/react": "^1.0.4",
-		"next": "11.1.2",
-		"next-auth": "^3.29.0",
-		"react": "17.0.2",
-		"react-dom": "17.0.2"
+		"apollo-server-express": "^3.3.0",
+		"class-validator": "^0.13.1",
+		"dotenv-safe": "^8.2.0",
+		"express": "^4.17.1",
+		"graphql": "^15.6.1",
+		"reflect-metadata": "^0.1.13",
+		"type-graphql": "^1.1.1"
 	},
 	"devDependencies": {
-		"@types/react": "17.0.24",
-		"autoprefixer": "^10.3.6",
-		"eslint": "7.32.0",
-		"eslint-config-next": "11.1.2",
-		"postcss": "^8.3.8",
-		"tailwindcss": "^2.2.16",
-		"typescript": "4.4.3"
+		"@types/node": "^16.10.3",
+		"nodemon": "^2.0.13",
+		"typescript": "^4.4.3"
 	}
 }
