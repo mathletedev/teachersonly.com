@@ -7,7 +7,7 @@ import Profile from "./Profile";
 const Settings: FC = () => {
 	const [tab, setTab] = useState("profile");
 	const [theme, setTheme] = useState(
-		typeof window !== "undefined" ? localStorage.theme : "dark"
+		typeof window !== "undefined" ? localStorage.theme : "light"
 	);
 
 	const invert = theme === "dark" ? "light" : "dark";

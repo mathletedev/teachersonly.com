@@ -4,7 +4,6 @@ import {
 	HttpLink,
 	InMemoryCache
 } from "@apollo/client";
-import { Provider } from "next-auth/client";
 import { AppProps } from "next/app";
 import { FC } from "react";
 import Layout from "../components/common/Layout";
@@ -19,11 +18,9 @@ const client = new ApolloClient({
 const _App: FC<AppProps> = ({ Component, pageProps }) => {
 	return (
 		<ApolloProvider client={client}>
-			<Provider session={pageProps.session}>
-				<Layout>
-					<Component {...pageProps} />
-				</Layout>
-			</Provider>
+			<Layout>
+				<Component {...pageProps} />
+			</Layout>
 		</ApolloProvider>
 	);
 };

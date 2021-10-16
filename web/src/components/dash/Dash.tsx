@@ -1,12 +1,13 @@
-import { useSession } from "next-auth/client";
+import { useQuery } from "@apollo/client";
 import { FC } from "react";
+import { QUERY_ME_USERNAME } from "../../lib/graphql";
 
 const Dash: FC = () => {
-	const [session] = useSession();
+	const { data } = useQuery(QUERY_ME_USERNAME);
 
 	return (
 		<div className="text-lg text-default">
-			hello, {session!.user?.name?.toLowerCase()}!
+			hello, {data.me.username.toLowerCase()}!
 		</div>
 	);
 };

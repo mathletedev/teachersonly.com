@@ -1,26 +1,52 @@
-import { signIn, useSession } from "next-auth/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { FC } from "react";
-import { __callbackUrl__ } from "../../lib/constants";
+import { FC, useState } from "react";
+import { QUERY_ME_ID } from "../../lib/graphql";
 import Loading from "../common/Loading";
 
-const Welcome: FC = () => {
-	const [session] = useSession();
-	const router = useRouter();
+const MUTATION_LOGIN = gql`
+	mutation Login($username: String!, $password: String!) {
+		login(username: $username, password: $password) {
+			username
+		}
+	}
+`;
 
-	if (session) {
+const Welcome: FC = () => {
+	const { data } = useQuery(QUERY_ME_ID);
+	const router = useRouter();
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [login] = useMutation(MUTATION_LOGIN);
+	console.log(data);
+
+	if (data.me) {
 		router.push("/dash");
 
 		return <Loading />;
 	}
 
 	return (
-		<button
-			onClick={() => signIn("google", { callbackUrl: __callbackUrl__ })}
-			className="m-auto text-button"
+		<form
+			onSubmit={(e) => {
+				e.preventDefault();
+				login({ variables: { username, password } });
+			}}
+			className="m-auto"
 		>
-			sign in with google
-		</button>
+			<input
+				value={username}
+				placeholder="username"
+				onChange={(e) => setUsername(e.target.value)}
+			/>
+			<div></div>
+			<input
+				value={password}
+				placeholder="password"
+				onChange={(e) => setPassword(e.target.value)}
+			/>
+			<button type="submit">login</button>
+		</form>
 	);
 };
 

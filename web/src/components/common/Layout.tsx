@@ -1,3 +1,4 @@
+import { useQuery } from "@apollo/client";
 import {
 	BellIcon,
 	ChatIcon,
@@ -5,15 +6,16 @@ import {
 	LogoutIcon,
 	SearchIcon
 } from "@heroicons/react/outline";
-import { signOut, useSession } from "next-auth/client";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
+import { QUERY_ME_ID } from "../../lib/graphql";
 import Loading from "./Loading";
 
 const Layout: FC = ({ children }) => {
-	const [session, loading] = useSession();
+	const { data, loading } = useQuery(QUERY_ME_ID);
+
 	const router = useRouter();
 
 	const navRef = useRef<HTMLElement>(null);
@@ -34,9 +36,9 @@ const Layout: FC = ({ children }) => {
 		document.documentElement.classList.remove("dark");
 	});
 
-	if (loading) return <Loading />;
+	if (loading || typeof window === "undefined") return <Loading />;
 
-	if (!session && router.pathname !== "/") {
+	if (!data.me && router.pathname !== "/") {
 		router.push("/");
 
 		return <Loading />;
@@ -51,7 +53,7 @@ const Layout: FC = ({ children }) => {
 					rel="stylesheet"
 				/>
 			</Head>
-			{session ? (
+			{data.me ? (
 				<Fragment>
 					<nav
 						className="flex items-center gap-2 bg-indigo-200 h-12 px-4 dark:bg-gray-700"
@@ -80,7 +82,7 @@ const Layout: FC = ({ children }) => {
 								<CogIcon className="icon-button" />
 							</Link>
 						</div>
-						<button onClick={() => signOut()} title="sign out">
+						<button title="sign out">
 							<LogoutIcon className="icon-button" />
 						</button>
 					</nav>
