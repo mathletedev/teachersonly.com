@@ -47,7 +47,6 @@ export class UserResolver {
 
 	@Query(() => User, { nullable: true })
 	public me(@Ctx() { req }: Context) {
-		console.log(req.session);
 		if (!req.session.userId) return;
 
 		return UserModel.findOne({ _id: req.session.userId });

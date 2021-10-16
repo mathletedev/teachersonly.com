@@ -14,13 +14,14 @@ const MUTATION_LOGIN = gql`
 
 const Welcome: FC = () => {
 	const { data } = useQuery(QUERY_ME_ID);
+
 	const router = useRouter();
+
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
-	const [login] = useMutation(MUTATION_LOGIN);
-	console.log(data);
+	const [login, res] = useMutation(MUTATION_LOGIN);
 
-	if (data.me) {
+	if (data.me || res.data?.login) {
 		router.push("/dash");
 
 		return <Loading />;
@@ -45,7 +46,9 @@ const Welcome: FC = () => {
 				placeholder="password"
 				onChange={(e) => setPassword(e.target.value)}
 			/>
-			<button type="submit">login</button>
+			<button type="submit" className="invisible">
+				login
+			</button>
 		</form>
 	);
 };

@@ -11,7 +11,10 @@ import { __serverUrl__ } from "../lib/constants";
 import "../styles/globals.css";
 
 const client = new ApolloClient({
-	link: new HttpLink({ uri: `${__serverUrl__}/graphql` }),
+	link: new HttpLink({
+		uri: `${__serverUrl__}/graphql`,
+		credentials: "include"
+	}),
 	cache: new InMemoryCache()
 });
 

@@ -1,4 +1,5 @@
 import { ApolloServer } from "apollo-server-express";
+import { json, urlencoded } from "body-parser";
 import MongoStore from "connect-mongo";
 import cors from "cors";
 import "dotenv-safe/config";
@@ -7,7 +8,12 @@ import session from "express-session";
 import { connect } from "mongoose";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
-import { __clientUrl__, __port__, __prod__ } from "./lib/constants";
+import {
+	__clientUrl__,
+	__port__,
+	__prod__,
+	__serverUrl__
+} from "./lib/constants";
 import { HelloResolver } from "./resolvers/hello";
 import { UserResolver } from "./resolvers/user";
 
@@ -18,10 +24,19 @@ import { UserResolver } from "./resolvers/user";
 
 	app.use(
 		cors({
-			origin: [__clientUrl__, "https://studio.apollographql.com"],
+			origin: [
+				__clientUrl__,
+				__serverUrl__,
+				"https://studio.apollographql.com"
+			],
 			credentials: true
 		})
 	);
+
+	app.use(urlencoded({ extended: true }));
+	app.use(json());
+
+	app.set("trust proxy", true);
 
 	app.use(
 		session({
@@ -35,7 +50,7 @@ import { UserResolver } from "./resolvers/user";
 			resave: false,
 			cookie: {
 				maxAge: 6.048e8,
-				httpOnly: __prod__,
+				httpOnly: true,
 				sameSite: "lax",
 				secure: __prod__
 			}
@@ -55,7 +70,11 @@ import { UserResolver } from "./resolvers/user";
 	server.applyMiddleware({
 		app,
 		cors: {
-			origin: [__clientUrl__, "https://studio.apollographql.com"],
+			origin: [
+				__clientUrl__,
+				__serverUrl__,
+				"https://studio.apollographql.com"
+			],
 			credentials: true
 		}
 	});
