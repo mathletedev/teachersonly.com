@@ -1,10 +1,13 @@
 import { ApolloServer } from "apollo-server-express";
+import MongoStore from "connect-mongo";
+import cors from "cors";
 import "dotenv-safe/config";
 import express from "express";
+import session from "express-session";
 import { connect } from "mongoose";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
-import { __port__ } from "./lib/constants";
+import { __clientUrl__, __port__, __prod__ } from "./lib/constants";
 import { HelloResolver } from "./resolvers/hello";
 import { UserResolver } from "./resolvers/user";
 
@@ -13,18 +16,48 @@ import { UserResolver } from "./resolvers/user";
 
 	const app = express();
 
+	app.use(
+		cors({
+			origin: [__clientUrl__, "https://studio.apollographql.com"],
+			credentials: true
+		})
+	);
+
+	app.use(
+		session({
+			name: "qid",
+			secret: process.env.SESSION_SECRET!,
+			store: MongoStore.create({
+				mongoUrl: process.env.MONGO_URI,
+				dbName: "teachersonly"
+			}),
+			saveUninitialized: false,
+			resave: false,
+			cookie: {
+				maxAge: 6.048e8,
+				httpOnly: __prod__,
+				sameSite: "lax",
+				secure: __prod__
+			}
+		})
+	);
+
 	const server = new ApolloServer({
 		schema: await buildSchema({
 			resolvers: [HelloResolver, UserResolver],
 			validate: false
-		})
+		}),
+		context: ({ req, res }) => ({ req, res })
 	});
 
 	await server.start();
 
 	server.applyMiddleware({
 		app,
-		cors: { origin: "*", credentials: true }
+		cors: {
+			origin: [__clientUrl__, "https://studio.apollographql.com"],
+			credentials: true
+		}
 	});
 
 	app.listen(__port__, () =>
