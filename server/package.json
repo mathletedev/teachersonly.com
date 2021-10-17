@@ -7,7 +7,7 @@
 	"scripts": {
 		"watch": "tsc -w",
 		"dev": "nodemon .",
-		"start": "tsc && node .",
+		"postinstall": "tsc",
 		"tsc": "tsc"
 	},
 	"repository": {
