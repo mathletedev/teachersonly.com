@@ -45,6 +45,7 @@ export class UserResolver {
 
 	@Query(() => User, { nullable: true })
 	public async me(@Ctx() { req }: Context) {
+		console.log(req.userId);
 		if (!req.userId) return;
 
 		return await UserModel.findById(req.userId);

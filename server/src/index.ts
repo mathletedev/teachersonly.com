@@ -1,5 +1,6 @@
 import { ApolloServer } from "apollo-server-express";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import "dotenv-safe/config";
 import express from "express";
 import { verify } from "jsonwebtoken";
@@ -16,6 +17,13 @@ import { UserResolver } from "./resolvers/user";
 	await connect(process.env.MONGO_URI!, { dbName: "teachersonly" });
 
 	const app = express();
+
+	app.use(
+		cors({
+			origin: [__clientUrl__, "https://studio.apollographql.com"],
+			credentials: true
+		})
+	);
 
 	app.use(cookieParser());
 
@@ -60,7 +68,9 @@ import { UserResolver } from "./resolvers/user";
 		context: ({ req, res }) => {
 			res.header(
 				"Access-Control-Allow-Origin",
-				"https://studio.apollographql.com"
+				process.env.EXPLORER === "true"
+					? "https://studio.apollographql.com"
+					: __clientUrl__
 			);
 			res.header("Access-Control-Allow-Credentials", "true");
 

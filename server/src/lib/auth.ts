@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { sign } from "jsonwebtoken";
 import { User } from "../entities/user";
+import { __prod__ } from "./constants";
 
 export const setTokens = (res: Response, user: User) => {
 	sign({ userId: user._id }, process.env.ACCESS_SECRET!, {
@@ -14,8 +15,9 @@ export const setTokens = (res: Response, user: User) => {
 		}),
 		{
 			maxAge: 6.048e8,
-			sameSite: "none",
-			secure: process.env.SECURE === "true"
+			sameSite:
+				process.env.EXPLORER === "true" ? "none" : __prod__ ? "none" : "lax",
+			secure: process.env.EXPLORER === "true" ? true : __prod__
 		}
 	);
 	res.cookie(
@@ -25,8 +27,9 @@ export const setTokens = (res: Response, user: User) => {
 		}),
 		{
 			maxAge: 9e5,
-			sameSite: "none",
-			secure: process.env.SECURE === "true"
+			sameSite:
+				process.env.EXPLORER === "true" ? "none" : __prod__ ? "none" : "lax",
+			secure: process.env.EXPLORER === "true" ? true : __prod__
 		}
 	);
 };

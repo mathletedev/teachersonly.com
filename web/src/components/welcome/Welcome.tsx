@@ -1,6 +1,5 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { useRouter } from "next/router";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { QUERY_ME_ID } from "../../lib/graphql/queries";
 import Loading from "../common/Loading";
 
@@ -13,24 +12,23 @@ const MUTATION_LOGIN = gql`
 `;
 
 const Welcome: FC = () => {
-	const { data } = useQuery(QUERY_ME_ID);
-
-	const router = useRouter();
+	const { data, loading } = useQuery(QUERY_ME_ID);
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [login, res] = useMutation(MUTATION_LOGIN);
 
-	if (data.me || res.data?.login) {
-		router.push("/dash");
+	useEffect(() => {
+		if (data?.me || res.data?.login) window.location.replace("/dash");
+	}, [data, res]);
 
-		return <Loading />;
-	}
+	if (loading) return <Loading />;
 
 	return (
 		<form
 			onSubmit={(e) => {
 				e.preventDefault();
+
 				login({ variables: { username, password } });
 			}}
 			className="m-auto"

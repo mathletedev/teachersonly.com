@@ -7,7 +7,7 @@ const Dash: FC = () => {
 
 	return (
 		<div className="text-lg text-default">
-			hello, {data.me.username.toLowerCase()}!
+			hello, {data?.me?.username.toLowerCase()}!
 		</div>
 	);
 };

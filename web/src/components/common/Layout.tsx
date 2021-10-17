@@ -22,6 +22,12 @@ const Layout: FC = ({ children }) => {
 	const [navHeight, setNavHeight] = useState(0);
 
 	useEffect(() => {
+		if (!data) return;
+
+		if (!data.me && router.pathname !== "/") window.location.replace("/");
+	}, [data]);
+
+	useEffect(() => {
 		setNavHeight(navRef.current?.clientHeight || 0);
 	});
 
@@ -38,12 +44,6 @@ const Layout: FC = ({ children }) => {
 
 	if (loading || typeof window === "undefined") return <Loading />;
 
-	if (!data.me && router.pathname !== "/") {
-		router.push("/");
-
-		return <Loading />;
-	}
-
 	return (
 		<Fragment>
 			<Head>
@@ -53,7 +53,7 @@ const Layout: FC = ({ children }) => {
 					rel="stylesheet"
 				/>
 			</Head>
-			{data.me ? (
+			{data?.me ? (
 				<Fragment>
 					<nav
 						className="flex items-center gap-2 bg-indigo-200 h-12 px-4 dark:bg-gray-700"
@@ -63,7 +63,7 @@ const Layout: FC = ({ children }) => {
 							title="teachersonly.com"
 							className="text-lg text-indigo-500 transition hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300"
 						>
-							<Link href="/">teachersonly.com</Link>
+							<Link href="/dash">teachersonly.com</Link>
 						</div>
 						<button title="search">
 							<SearchIcon className="icon-button" />
