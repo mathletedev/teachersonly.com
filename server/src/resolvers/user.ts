@@ -1,6 +1,8 @@
 import { hash, verify } from "argon2";
+import "dotenv-safe/config";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { User, UserModel } from "../entities/user";
+import { setTokens } from "../lib/auth";
 import { Context } from "../lib/types";
 
 @Resolver()
@@ -9,29 +11,25 @@ export class UserResolver {
 	public async register(
 		@Arg("username") username: string,
 		@Arg("email") email: string,
-		@Arg("password") password: string,
-		@Ctx() { req }: Context
+		@Arg("password") password: string
 	) {
 		const hashed = await hash(password);
-		let user;
 
 		try {
-			user = new UserModel({ username, email, password: hashed });
+			const user = new UserModel({ username, email, password: hashed });
 			await user.save();
+
+			return user;
 		} catch (err) {
 			return;
 		}
-
-		req.session.userId = user._id;
-
-		return user;
 	}
 
 	@Mutation(() => User, { nullable: true })
 	public async login(
 		@Arg("username") username: string,
 		@Arg("password") password: string,
-		@Ctx() { req }: Context
+		@Ctx() { res }: Context
 	) {
 		const user = await UserModel.findOne(
 			username.includes("@") ? { email: username } : { username }
@@ -40,20 +38,33 @@ export class UserResolver {
 
 		if (!(await verify(user.password, password))) return;
 
-		req.session.userId = user._id;
+		setTokens(res, user);
 
 		return user;
 	}
 
 	@Query(() => User, { nullable: true })
-	public me(@Ctx() { req }: Context) {
-		if (!req.session.userId) return;
+	public async me(@Ctx() { req }: Context) {
+		if (!req.userId) return;
 
-		return UserModel.findOne({ _id: req.session.userId });
+		return await UserModel.findById(req.userId);
 	}
 
 	@Query(() => [User])
 	public async users() {
 		return await UserModel.find();
+	}
+
+	@Mutation(() => Boolean)
+	public async invalidateTokens(@Ctx() { req }: Context) {
+		if (!req.userId) return false;
+
+		const user = await UserModel.findById(req.userId);
+		if (!user) return false;
+
+		user.count += 1;
+		await user.save();
+
+		return true;
 	}
 }

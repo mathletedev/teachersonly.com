@@ -1,19 +1,14 @@
 import { ApolloServer } from "apollo-server-express";
-import { json, urlencoded } from "body-parser";
-import MongoStore from "connect-mongo";
-import cors from "cors";
+import cookieParser from "cookie-parser";
 import "dotenv-safe/config";
 import express from "express";
-import session from "express-session";
+import { verify } from "jsonwebtoken";
 import { connect } from "mongoose";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
-import {
-	__clientUrl__,
-	__port__,
-	__prod__,
-	__serverUrl__
-} from "./lib/constants";
+import { UserModel } from "./entities/user";
+import { setTokens } from "./lib/auth";
+import { __clientUrl__, __port__ } from "./lib/constants";
 import { HelloResolver } from "./resolvers/hello";
 import { UserResolver } from "./resolvers/user";
 
@@ -22,47 +17,55 @@ import { UserResolver } from "./resolvers/user";
 
 	const app = express();
 
-	app.use(
-		cors({
-			origin: [
-				__clientUrl__,
-				__serverUrl__,
-				"https://studio.apollographql.com"
-			],
-			credentials: true
-		})
-	);
+	app.use(cookieParser());
 
-	app.use(urlencoded({ extended: true }));
-	app.use(json());
+	app.use(async (req, res, next) => {
+		const refreshToken = req.cookies["refresh-token"];
+		const accessToken = req.cookies["access-token"];
 
-	app.set("trust proxy", true);
+		if (!refreshToken && !accessToken) return next();
 
-	app.use(
-		session({
-			name: "qid",
-			secret: process.env.SESSION_SECRET!,
-			store: MongoStore.create({
-				mongoUrl: process.env.MONGO_URI,
-				dbName: "teachersonly"
-			}),
-			saveUninitialized: false,
-			resave: false,
-			cookie: {
-				maxAge: 6.048e8,
-				httpOnly: true,
-				sameSite: "lax",
-				secure: __prod__
-			}
-		})
-	);
+		try {
+			req.userId = (
+				verify(accessToken, process.env.ACCESS_SECRET!) as any
+			).userId;
+
+			return next();
+		} catch {}
+
+		if (!refreshToken) return next();
+
+		let data;
+
+		try {
+			data = verify(refreshToken, process.env.REFRESH_SECRET!) as any;
+		} catch {
+			return next();
+		}
+
+		const user = await UserModel.findById(data.userId);
+		if (!user || user.count !== data.count) return next();
+
+		setTokens(res, user);
+		req.userId = user._id.toString();
+
+		next();
+	});
 
 	const server = new ApolloServer({
 		schema: await buildSchema({
 			resolvers: [HelloResolver, UserResolver],
 			validate: false
 		}),
-		context: ({ req, res }) => ({ req, res })
+		context: ({ req, res }) => {
+			res.header(
+				"Access-Control-Allow-Origin",
+				"https://studio.apollographql.com"
+			);
+			res.header("Access-Control-Allow-Credentials", "true");
+
+			return { req, res };
+		}
 	});
 
 	await server.start();
@@ -70,11 +73,7 @@ import { UserResolver } from "./resolvers/user";
 	server.applyMiddleware({
 		app,
 		cors: {
-			origin: [
-				__clientUrl__,
-				__serverUrl__,
-				"https://studio.apollographql.com"
-			],
+			origin: [__clientUrl__, "https://studio.apollographql.com"],
 			credentials: true
 		}
 	});

@@ -1,12 +1,6 @@
-import { Request } from "express";
-import { ObjectId } from "mongodb";
+import { Request, Response } from "express";
 
 export type Context = {
 	req: Request;
+	res: Response;
 };
-
-declare module "express-session" {
-	export interface SessionData {
-		userId: ObjectId;
-	}
-}

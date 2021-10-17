@@ -8,6 +8,9 @@ export class User {
 	@Field(() => ObjectIdScalar)
 	public readonly _id: ObjectId;
 
+	@Property({ required: true, default: 0 })
+	public count: number;
+
 	@Field()
 	@Property({ required: true, unique: true })
 	public username: string;
