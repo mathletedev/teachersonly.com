@@ -10,7 +10,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
-import { QUERY_ME_ID } from "../../lib/graphql";
+import { QUERY_ME_ID } from "../../lib/graphql/queries";
 import Loading from "./Loading";
 
 const Layout: FC = ({ children }) => {

@@ -1,7 +1,7 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { FC, useState } from "react";
-import { QUERY_ME_ID } from "../../lib/graphql";
+import { QUERY_ME_ID } from "../../lib/graphql/queries";
 import Loading from "../common/Loading";
 
 const MUTATION_LOGIN = gql`

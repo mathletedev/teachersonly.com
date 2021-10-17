@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { FC } from "react";
-import { QUERY_ME_USERNAME } from "../../lib/graphql";
+import { QUERY_ME_USERNAME } from "../../lib/graphql/queries";
 
 const Profile: FC = () => {
 	const { data } = useQuery(QUERY_ME_USERNAME);
