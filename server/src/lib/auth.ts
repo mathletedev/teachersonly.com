@@ -15,7 +15,7 @@ export const setTokens = (res: Response, user: User) => {
 		{
 			maxAge: 6.048e8,
 			sameSite: "none",
-			secure: true
+			secure: process.env.SECURE === "true"
 		}
 	);
 	res.cookie(
@@ -26,7 +26,7 @@ export const setTokens = (res: Response, user: User) => {
 		{
 			maxAge: 9e5,
 			sameSite: "none",
-			secure: true
+			secure: process.env.SECURE === "true"
 		}
 	);
 };
