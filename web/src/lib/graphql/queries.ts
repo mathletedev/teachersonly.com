@@ -15,3 +15,11 @@ export const QUERY_ME_USERNAME = gql`
 		}
 	}
 `;
+
+export const QUERY_ME_DARK_MODE = gql`
+	query DarkMode {
+		me {
+			darkMode
+		}
+	}
+`;

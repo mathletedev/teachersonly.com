@@ -10,7 +10,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
-import { QUERY_ME_ID } from "../../lib/graphql/queries";
+import { QUERY_ME_DARK_MODE } from "../../lib/graphql/queries";
 import Loading from "./Loading";
 
 const MUTATION_LOGOUT = gql`
@@ -20,7 +20,7 @@ const MUTATION_LOGOUT = gql`
 `;
 
 const Layout: FC = ({ children }) => {
-	const { data, loading } = useQuery(QUERY_ME_ID);
+	const { data, loading } = useQuery(QUERY_ME_DARK_MODE);
 	const [logout] = useMutation(MUTATION_LOGOUT);
 
 	const router = useRouter();
@@ -39,11 +39,7 @@ const Layout: FC = ({ children }) => {
 	});
 
 	useEffect(() => {
-		if (
-			localStorage.theme === "dark" ||
-			(!("theme" in localStorage) &&
-				window.matchMedia("(prefers-color-scheme: dark)").matches)
-		)
+		if (data?.me?.darkMode)
 			return document.documentElement.classList.add("dark");
 
 		document.documentElement.classList.remove("dark");

@@ -21,6 +21,10 @@ export class User {
 
 	@Property({ required: true })
 	public password: string;
+
+	@Field()
+	@Property({ required: true, default: false })
+	public darkMode: boolean;
 }
 
 export const UserModel = getModelForClass(User);

@@ -86,4 +86,20 @@ export class UserResolver {
 
 		return true;
 	}
+
+	@Mutation(() => Boolean)
+	public async setDarkMode(
+		@Arg("darkMode") darkMode: boolean,
+		@Ctx() { req }: Context
+	) {
+		if (!req.userId) return false;
+
+		const user = await UserModel.findById(req.userId);
+		if (!user) return false;
+
+		user.darkMode = darkMode;
+		await user.save();
+
+		return true;
+	}
 }

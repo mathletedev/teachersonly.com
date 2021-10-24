@@ -1,23 +1,25 @@
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { MoonIcon, SunIcon, UserIcon } from "@heroicons/react/outline";
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useState } from "react";
+import { QUERY_ME_DARK_MODE } from "../../lib/graphql/queries";
+import Loading from "../common/Loading";
 import Sidebar from "../navigation/Sidebar";
 import SidebarItem from "../navigation/SidebarItem";
 import Profile from "./Profile";
 
+const MUTATION_SET_DARK_MODE = gql`
+	mutation SetDarkMode($darkMode: Boolean!) {
+		setDarkMode(darkMode: $darkMode)
+	}
+`;
+
 const Settings: FC = () => {
+	const { data, loading } = useQuery(QUERY_ME_DARK_MODE);
+	const [setDarkMode] = useMutation(MUTATION_SET_DARK_MODE);
+
 	const [tab, setTab] = useState("profile");
-	const [theme, setTheme] = useState(
-		typeof window !== "undefined" ? localStorage.theme : "light"
-	);
 
-	const invert = theme === "dark" ? "light" : "dark";
-
-	useEffect(() => {
-		window.document.documentElement.classList.remove(invert);
-		window.document.documentElement.classList.add(theme);
-
-		if (typeof window !== "undefined") localStorage.setItem("theme", theme);
-	}, [theme]);
+	if (loading) return <Loading />;
 
 	return (
 		<Fragment>
@@ -26,13 +28,15 @@ const Settings: FC = () => {
 					<SidebarItem title="profile" Icon={UserIcon} />
 				</button>
 				<button
-					onClick={() =>
-						theme === "light" ? setTheme("dark") : setTheme("light")
-					}
+					onClick={async () => {
+						await setDarkMode({ variables: { darkMode: !data?.me.darkMode } });
+
+						window.location.reload();
+					}}
 				>
 					<SidebarItem
 						title="toggle theme"
-						Icon={theme === "light" ? SunIcon : MoonIcon}
+						Icon={data?.me.darkMode ? MoonIcon : SunIcon}
 					/>
 				</button>
 			</Sidebar>

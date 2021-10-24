@@ -11,10 +11,10 @@ const MUTATION_LOGIN = gql`
 
 const Welcome: FC = () => {
 	const { data, loading } = useQuery(QUERY_ME_ID);
+	const [login, res] = useMutation(MUTATION_LOGIN);
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
-	const [login, res] = useMutation(MUTATION_LOGIN);
 
 	useEffect(() => {
 		if (data?.me || res.data?.login) window.location.replace("/dash");
