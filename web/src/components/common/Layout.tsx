@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import {
 	BellIcon,
 	ChatIcon,
@@ -13,8 +13,15 @@ import React, { FC, Fragment, useEffect, useRef, useState } from "react";
 import { QUERY_ME_ID } from "../../lib/graphql/queries";
 import Loading from "./Loading";
 
+const MUTATION_LOGOUT = gql`
+	mutation Logout {
+		logout
+	}
+`;
+
 const Layout: FC = ({ children }) => {
 	const { data, loading } = useQuery(QUERY_ME_ID);
+	const [logout] = useMutation(MUTATION_LOGOUT);
 
 	const router = useRouter();
 
@@ -82,7 +89,14 @@ const Layout: FC = ({ children }) => {
 								<CogIcon className="icon-button" />
 							</Link>
 						</div>
-						<button title="sign out">
+						<button
+							onClick={async () => {
+								await logout();
+
+								window.location.replace("/");
+							}}
+							title="sign out"
+						>
 							<LogoutIcon className="icon-button" />
 						</button>
 					</nav>
