@@ -4,10 +4,6 @@ import { User } from "../entities/user";
 import { __prod__ } from "./constants";
 
 export const setTokens = (res: Response, user: User) => {
-	sign({ userId: user._id }, process.env.ACCESS_SECRET!, {
-		expiresIn: "15min"
-	});
-
 	res.cookie(
 		"refresh-token",
 		sign({ userId: user._id, count: user.count }, process.env.REFRESH_SECRET!, {

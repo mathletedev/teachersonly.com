@@ -3,6 +3,7 @@ import "dotenv-safe/config";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { User, UserModel } from "../entities/user";
 import { setTokens } from "../lib/auth";
+import { __prod__ } from "../lib/constants";
 import { Context } from "../lib/types";
 
 @Resolver()
@@ -25,7 +26,7 @@ export class UserResolver {
 		}
 	}
 
-	@Mutation(() => User, { nullable: true })
+	@Mutation(() => Boolean)
 	public async login(
 		@Arg("username") username: string,
 		@Arg("password") password: string,
@@ -34,21 +35,38 @@ export class UserResolver {
 		const user = await UserModel.findOne(
 			username.includes("@") ? { email: username } : { username }
 		);
-		if (!user) return;
+		if (!user) return false;
 
-		if (!(await verify(user.password, password))) return;
+		if (!(await verify(user.password, password))) return false;
 
 		setTokens(res, user);
 
-		return user;
+		return true;
 	}
 
 	@Query(() => User, { nullable: true })
 	public async me(@Ctx() { req }: Context) {
-		console.log(req.userId);
 		if (!req.userId) return;
 
 		return await UserModel.findById(req.userId);
+	}
+
+	@Mutation(() => Boolean)
+	public logout(@Ctx() { res }: Context) {
+		res.cookie("refresh-token", "", {
+			maxAge: 0,
+			sameSite:
+				process.env.EXPLORER === "true" ? "none" : __prod__ ? "none" : "lax",
+			secure: process.env.EXPLORER === "true" ? true : __prod__
+		});
+		res.cookie("access-token", "", {
+			maxAge: 0,
+			sameSite:
+				process.env.EXPLORER === "true" ? "none" : __prod__ ? "none" : "lax",
+			secure: process.env.EXPLORER === "true" ? true : __prod__
+		});
+
+		return true;
 	}
 
 	@Query(() => [User])

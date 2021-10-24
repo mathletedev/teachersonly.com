@@ -9,7 +9,7 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { UserModel } from "./entities/user";
 import { setTokens } from "./lib/auth";
-import { __clientUrl__, __port__ } from "./lib/constants";
+import { __clientUrl__, __graphqlUrl__, __port__ } from "./lib/constants";
 import { HelloResolver } from "./resolvers/hello";
 import { UserResolver } from "./resolvers/user";
 
@@ -20,7 +20,7 @@ import { UserResolver } from "./resolvers/user";
 
 	app.use(
 		cors({
-			origin: [__clientUrl__, "https://studio.apollographql.com"],
+			origin: [__clientUrl__, __graphqlUrl__],
 			credentials: true
 		})
 	);
@@ -69,7 +69,7 @@ import { UserResolver } from "./resolvers/user";
 			res.header(
 				"Access-Control-Allow-Origin",
 				process.env.EXPLORER === "true"
-					? "https://studio.apollographql.com"
+					? __graphqlUrl__
 					: __clientUrl__
 			);
 			res.header("Access-Control-Allow-Credentials", "true");
@@ -83,7 +83,7 @@ import { UserResolver } from "./resolvers/user";
 	server.applyMiddleware({
 		app,
 		cors: {
-			origin: [__clientUrl__, "https://studio.apollographql.com"],
+			origin: [__clientUrl__, __graphqlUrl__],
 			credentials: true
 		}
 	});
