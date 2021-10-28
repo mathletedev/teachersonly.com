@@ -60,7 +60,9 @@ const Welcome: FC = () => {
 				</button>
 			</form>
 			<div className="flex-grow"></div>
-			<div className="text-center cursor-pointer text-default">register</div>
+			<div className="inline-block m-auto cursor-pointer text-default">
+				register
+			</div>
 		</div>
 	);
 };

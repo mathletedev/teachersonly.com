@@ -8,6 +8,16 @@ body {
 	@apply dark:bg-gray-900;
 }
 
+input {
+	@apply bg-indigo-50;
+	@apply text-gray-500;
+	@apply rounded;
+	@apply outline-none;
+
+	@apply dark:bg-gray-900;
+	@apply dark:text-gray-400;
+}
+
 .text-default {
 	@apply text-gray-500;
 
@@ -43,8 +53,6 @@ body {
 }
 
 .text-input {
-	@apply rounded;
-	@apply outline-none;
 	@apply py-1;
 	@apply px-3;
 }
