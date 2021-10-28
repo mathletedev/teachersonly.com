@@ -14,6 +14,11 @@ body {
 	@apply dark:text-gray-400;
 }
 
+.unselectable {
+	@apply select-none;
+	@apply cursor-default;
+}
+
 .text-button {
 	@apply bg-indigo-500;
 	@apply rounded;
@@ -35,6 +40,13 @@ body {
 
 	@apply dark:text-indigo-400;
 	@apply dark:hover:text-indigo-300;
+}
+
+.text-input {
+	@apply rounded;
+	@apply outline-none;
+	@apply py-1;
+	@apply px-3;
 }
 
 .sidebar-item {

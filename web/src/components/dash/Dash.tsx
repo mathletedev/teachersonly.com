@@ -6,7 +6,7 @@ const Dash: FC = () => {
 	const { data } = useQuery(QUERY_ME_USERNAME);
 
 	return (
-		<div className="text-lg text-default">
+		<div className="text-center text-lg text-default">
 			hello, {data?.me?.username.toLowerCase()}!
 		</div>
 	);

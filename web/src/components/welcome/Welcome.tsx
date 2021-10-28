@@ -23,29 +23,45 @@ const Welcome: FC = () => {
 	if (loading) return <Loading />;
 
 	return (
-		<form
-			onSubmit={(e) => {
-				e.preventDefault();
+		<div className="flex flex-col pb-4 bg-indigo-100 rounded-3xl m-auto h-96 w-96">
+			<div className="text-center text-4xl text-indigo-500 pt-8 pb-10 unselectable">
+				teachersonly.com
+			</div>
+			<form
+				onSubmit={async (e) => {
+					e.preventDefault();
 
-				login({ variables: { username, password } });
-			}}
-			className="m-auto"
-		>
-			<input
-				value={username}
-				placeholder="username"
-				onChange={(e) => setUsername(e.target.value)}
-			/>
-			<div></div>
-			<input
-				value={password}
-				placeholder="password"
-				onChange={(e) => setPassword(e.target.value)}
-			/>
-			<button type="submit" className="invisible">
-				login
-			</button>
-		</form>
+					const { data } = await login({ variables: { username, password } });
+					if (!data.login) alert("invalid username or password");
+				}}
+				className="px-8"
+			>
+				<div>
+					<label className="text-default">username or email</label>
+					<input
+						value={username}
+						onChange={(e) => setUsername(e.target.value)}
+						className="w-full text-input"
+					/>
+				</div>
+				<div className="h-4"></div>
+				<div>
+					<label className="text-default">password</label>
+					<input
+						type="password"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						className="w-full text-input"
+					/>
+				</div>
+				<div className="h-4"></div>
+				<button type="submit" className="w-full text-button">
+					log in
+				</button>
+			</form>
+			<div className="flex-grow"></div>
+			<div className="text-center cursor-pointer text-default">register</div>
+		</div>
 	);
 };
 
