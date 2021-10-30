@@ -8,22 +8,26 @@ import { Context } from "../lib/types";
 
 @Resolver()
 export class UserResolver {
-	@Mutation(() => User, { nullable: true })
+	@Mutation(() => String, { nullable: true })
 	public async register(
 		@Arg("username") username: string,
 		@Arg("email") email: string,
 		@Arg("password") password: string
 	) {
+		if (await UserModel.exists({ email })) return "account";
+		if (await UserModel.exists({ username })) return "username";
+		if (!email.includes("@")) return "email";
+		if (
+			!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$&*]).{8,}$/)
+		)
+			return "password";
+
 		const hashed = await hash(password);
 
-		try {
-			const user = new UserModel({ username, email, password: hashed });
-			await user.save();
+		const user = new UserModel({ username, email, password: hashed });
+		await user.save();
 
-			return user;
-		} catch (err) {
-			return;
-		}
+		return "success";
 	}
 
 	@Mutation(() => Boolean)
