@@ -13,18 +13,19 @@ const LabelledInput: FC<Props> = ({
 	label,
 	inputValue,
 	onInputChange,
-	inputType = "text",
+	inputType,
 	inputStyle,
 	divider
 }) => {
 	return (
 		<div>
 			<label className="text-default">{label}</label>
+			<br />
 			<input
 				type={inputType}
 				value={inputValue}
 				onChange={onInputChange}
-				className={`${inputStyle && `${inputStyle} `}text-input`}
+				className={`${inputStyle ? `${inputStyle} ` : ""}text-input`}
 			/>
 			{divider && <div className="h-4"></div>}
 		</div>

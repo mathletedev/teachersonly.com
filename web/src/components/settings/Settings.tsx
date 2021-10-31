@@ -40,11 +40,13 @@ const Settings: FC = () => {
 					/>
 				</button>
 			</Sidebar>
-			{
+			<div className="p-4 float-left">
 				{
-					profile: <Profile />
-				}[tab]
-			}
+					{
+						profile: <Profile />
+					}[tab]
+				}
+			</div>
 		</Fragment>
 	);
 };
