@@ -78,7 +78,7 @@ const Welcome: FC = () => {
 					label={`username${showEmail ? "" : " or email"}`}
 					inputValue={username}
 					onInputChange={(e) => setUsername(e.target.value)}
-					inputStyle="w-full"
+					inputStyle="w-full bg-indigo-50"
 					divider
 				/>
 				{showEmail && (
@@ -86,7 +86,7 @@ const Welcome: FC = () => {
 						label="email"
 						inputValue={email}
 						onInputChange={(e) => setEmail(e.target.value)}
-						inputStyle="w-full"
+						inputStyle="w-full bg-indigo-50"
 						divider
 					/>
 				)}
@@ -95,7 +95,7 @@ const Welcome: FC = () => {
 					inputValue={password}
 					onInputChange={(e) => setPassword(e.target.value)}
 					inputType="password"
-					inputStyle="w-full"
+					inputStyle="w-full bg-indigo-50"
 				/>
 				<div className="h-8"></div>
 				<button type="submit" className="w-full text-button">

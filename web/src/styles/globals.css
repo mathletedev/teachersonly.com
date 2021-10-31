@@ -10,12 +10,12 @@
 	}
 
 	input {
-		@apply bg-indigo-50;
+		@apply bg-indigo-100;
 		@apply text-gray-500;
 		@apply rounded;
 		@apply outline-none;
 
-		@apply dark:bg-gray-900;
+		@apply dark:bg-gray-800;
 		@apply dark:text-gray-400;
 	}
 }
