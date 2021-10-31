@@ -15,7 +15,9 @@ export class UserResolver {
 		@Arg("password") password: string
 	) {
 		if (await UserModel.exists({ email })) return "account";
-		if (await UserModel.exists({ username })) return "username";
+		if (await UserModel.exists({ username })) return "taken";
+
+		if (!/^[a-z0-9]+$/.test(username) || username.length < 3) return "username";
 		if (!email.includes("@")) return "email";
 		if (
 			!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$&*]).{8,}$/)

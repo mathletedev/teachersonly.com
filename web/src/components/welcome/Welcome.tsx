@@ -54,13 +54,17 @@ const Welcome: FC = () => {
 						switch (data.register) {
 							case "account":
 								return alert("account already exists");
-							case "username":
+							case "taken":
 								return alert("username already exists");
+							case "username":
+								return alert(
+									"username must be at least 3 characters long and only contain lowercase letters and digits"
+								);
 							case "email":
 								return alert("invalid email address");
 							case "password":
 								return alert(
-									"password must be at least 8 characters long and include:\n• a lowercase character\n• an uppercase character\n• a number\n• a special character"
+									"password must be at least 8 characters long and contain:\n• a lowercase character\n• an uppercase character\n• a digit\n• a special character"
 								);
 						}
 					}
