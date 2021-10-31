@@ -1,6 +1,7 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { QUERY_ME_ID } from "../../lib/graphql/queries";
+import LabelledInput from "../common/LabelledInput";
 import Loading from "../common/Loading";
 
 const MUTATION_LOGIN = gql`
@@ -64,46 +65,35 @@ const Welcome: FC = () => {
 						}
 					}
 
-					if (!(await login({ variables: { username, password } })).data)
+					if (!(await login({ variables: { username, password } })).data.login)
 						alert("invalid username or password");
 				}}
 				className="px-8"
 			>
-				<div>
-					<label className="text-default">
-						username{!showEmail && " or email"}
-					</label>
-					<input
-						value={username}
-						onChange={(e) => setUsername(e.target.value)}
-						className="w-full text-input"
-					/>
-				</div>
-				<div className="h-4"></div>
+				<LabelledInput
+					label={`username${showEmail ? "" : " or email"}`}
+					inputValue={username}
+					onInputChange={(e) => setUsername(e.target.value)}
+					inputStyle="w-full"
+					divider
+				/>
 				{showEmail && (
-					<Fragment>
-						<div>
-							<label className="text-default">email</label>
-							<input
-								type="email"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-								className="w-full text-input"
-							/>
-						</div>
-						<div className="h-4"></div>
-					</Fragment>
-				)}
-				<div>
-					<label className="text-default">password</label>
-					<input
-						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						className="w-full text-input"
+					<LabelledInput
+						label="email"
+						inputValue={email}
+						onInputChange={(e) => setEmail(e.target.value)}
+						inputStyle="w-full"
+						divider
 					/>
-				</div>
-				<div className="h-4"></div>
+				)}
+				<LabelledInput
+					label="password"
+					inputValue={password}
+					onInputChange={(e) => setPassword(e.target.value)}
+					inputType="password"
+					inputStyle="w-full"
+				/>
+				<div className="h-8"></div>
 				<button type="submit" className="w-full text-button">
 					{showEmail ? "register" : "log in"}
 				</button>
