@@ -75,11 +75,6 @@ export class UserResolver {
 		return true;
 	}
 
-	@Query(() => [User])
-	public async users() {
-		return await UserModel.find();
-	}
-
 	@Mutation(() => Boolean)
 	public async invalidateTokens(@Ctx() { req }: Context) {
 		if (!req.userId) return false;
@@ -94,16 +89,17 @@ export class UserResolver {
 	}
 
 	@Mutation(() => Boolean)
-	public async setDarkMode(
-		@Arg("darkMode") darkMode: boolean,
-		@Ctx() { req }: Context
-	) {
+	public async editProfile(@Arg("data") data: string, @Ctx() { req }: Context) {
 		if (!req.userId) return false;
 
 		const user = await UserModel.findById(req.userId);
 		if (!user) return false;
 
-		user.darkMode = darkMode;
+		const parsed = JSON.parse(data);
+		if ("username" in parsed || "email" in parsed || "password" in parsed)
+			return false;
+
+		Object.assign(user, parsed);
 		await user.save();
 
 		return true;

@@ -23,6 +23,10 @@ export class User {
 	public password: string;
 
 	@Field()
+	@Property()
+	public displayName?: string;
+
+	@Field()
 	@Property({ required: true, default: false })
 	public darkMode: boolean;
 }
