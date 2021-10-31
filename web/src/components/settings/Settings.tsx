@@ -1,21 +1,22 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
-import { MoonIcon, SunIcon, UserIcon } from "@heroicons/react/outline";
+import { useMutation, useQuery } from "@apollo/client";
+import {
+	MoonIcon,
+	ShieldCheckIcon,
+	SunIcon,
+	UserIcon
+} from "@heroicons/react/outline";
 import { FC, Fragment, useState } from "react";
+import { MUTATION_EDIT_PROFILE } from "../../lib/graphql/mutations";
 import { QUERY_ME_DARK_MODE } from "../../lib/graphql/queries";
 import Loading from "../common/Loading";
 import Sidebar from "../navigation/Sidebar";
 import SidebarItem from "../navigation/SidebarItem";
+import Account from "./Account";
 import Profile from "./Profile";
-
-const MUTATION_SET_DARK_MODE = gql`
-	mutation SetDarkMode($darkMode: Boolean!) {
-		setDarkMode(darkMode: $darkMode)
-	}
-`;
 
 const Settings: FC = () => {
 	const { data, loading } = useQuery(QUERY_ME_DARK_MODE);
-	const [setDarkMode] = useMutation(MUTATION_SET_DARK_MODE);
+	const [editProfile] = useMutation(MUTATION_EDIT_PROFILE);
 
 	const [tab, setTab] = useState("profile");
 
@@ -25,11 +26,26 @@ const Settings: FC = () => {
 		<Fragment>
 			<Sidebar>
 				<button onClick={() => setTab("profile")}>
-					<SidebarItem title="profile" Icon={UserIcon} />
+					<SidebarItem
+						title="profile"
+						Icon={UserIcon}
+						selected={tab === "profile"}
+					/>
+				</button>
+				<button onClick={() => setTab("account")}>
+					<SidebarItem
+						title="account"
+						Icon={ShieldCheckIcon}
+						selected={tab === "account"}
+					/>
 				</button>
 				<button
 					onClick={async () => {
-						await setDarkMode({ variables: { darkMode: !data?.me.darkMode } });
+						await editProfile({
+							variables: {
+								data: JSON.stringify({ darkMode: !data?.me.darkMode })
+							}
+						});
 
 						window.location.reload();
 					}}
@@ -43,7 +59,8 @@ const Settings: FC = () => {
 			<div className="p-4 float-left">
 				{
 					{
-						profile: <Profile />
+						profile: <Profile />,
+						account: <Account />
 					}[tab]
 				}
 			</div>
