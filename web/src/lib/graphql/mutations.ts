@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
-export const MUTATION_EDIT_PROFILE = gql`
-	mutation EditProfile($data: String!) {
-		editProfile(data: $data)
+export const MUTATION_EDIT_USER = gql`
+	mutation EditUser($data: String!) {
+		editUser(data: $data)
 	}
 `;

@@ -6,7 +6,7 @@ import {
 	UserIcon
 } from "@heroicons/react/outline";
 import { FC, Fragment, useState } from "react";
-import { MUTATION_EDIT_PROFILE } from "../../lib/graphql/mutations";
+import { MUTATION_EDIT_USER } from "../../lib/graphql/mutations";
 import { QUERY_ME_DARK_MODE } from "../../lib/graphql/queries";
 import Loading from "../common/Loading";
 import Sidebar from "../navigation/Sidebar";
@@ -16,7 +16,7 @@ import Profile from "./Profile";
 
 const Settings: FC = () => {
 	const { data, loading } = useQuery(QUERY_ME_DARK_MODE);
-	const [editProfile] = useMutation(MUTATION_EDIT_PROFILE);
+	const [editUser] = useMutation(MUTATION_EDIT_USER);
 
 	const [tab, setTab] = useState("profile");
 
@@ -41,7 +41,7 @@ const Settings: FC = () => {
 				</button>
 				<button
 					onClick={async () => {
-						await editProfile({
+						await editUser({
 							variables: {
 								data: JSON.stringify({ darkMode: !data?.me.darkMode })
 							}

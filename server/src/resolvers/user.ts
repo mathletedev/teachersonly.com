@@ -89,7 +89,7 @@ export class UserResolver {
 	}
 
 	@Mutation(() => Boolean)
-	public async editProfile(@Arg("data") data: string, @Ctx() { req }: Context) {
+	public async editUser(@Arg("data") data: string, @Ctx() { req }: Context) {
 		if (!req.userId) return false;
 
 		const user = await UserModel.findById(req.userId);

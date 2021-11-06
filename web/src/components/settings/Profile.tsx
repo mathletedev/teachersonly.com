@@ -1,12 +1,12 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { FC, Fragment, useEffect, useState } from "react";
 import { __flairs__ } from "../../lib/constants";
-import { MUTATION_EDIT_PROFILE } from "../../lib/graphql/mutations";
+import { MUTATION_EDIT_USER } from "../../lib/graphql/mutations";
 import LabelledInput from "../common/LabelledInput";
 import Loading from "../common/Loading";
 
-const QUERY_ME_SETTINGS = gql`
-	query MeSettings {
+const QUERY_ME_PROFILE = gql`
+	query MeProfile {
 		me {
 			displayName
 			status
@@ -22,8 +22,8 @@ interface SettingsData {
 }
 
 const Profile: FC = () => {
-	const { data, loading } = useQuery(QUERY_ME_SETTINGS);
-	const [editProfile] = useMutation(MUTATION_EDIT_PROFILE);
+	const { data, loading } = useQuery(QUERY_ME_PROFILE);
+	const [editUser] = useMutation(MUTATION_EDIT_USER);
 
 	const [settings, setSettings] = useState<SettingsData>({});
 
@@ -40,7 +40,7 @@ const Profile: FC = () => {
 		<Fragment>
 			<form
 				onSubmit={async () => {
-					await editProfile({
+					await editUser({
 						variables: {
 							data: JSON.stringify(settings)
 						}
