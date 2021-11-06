@@ -18,6 +18,18 @@
 		@apply dark:bg-gray-800;
 		@apply dark:text-gray-400;
 	}
+
+	select {
+		@apply h-8;
+		@apply bg-indigo-100;
+		@apply text-gray-500;
+		@apply rounded;
+		@apply px-2;
+		@apply outline-none;
+
+		@apply dark:bg-gray-800;
+		@apply dark:text-gray-400;
+	}
 }
 
 .text-default {
@@ -40,6 +52,9 @@
 
 	@apply transition;
 	@apply hover:bg-indigo-600;
+
+	@apply dark:bg-indigo-400;
+	@apply dark:hover:bg-indigo-300;
 }
 
 .icon-button {

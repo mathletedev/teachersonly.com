@@ -2,19 +2,19 @@ import { ChangeEventHandler, FC, HTMLInputTypeAttribute } from "react";
 
 interface Props {
 	label: string;
-	inputValue?: string;
-	onInputChange?: ChangeEventHandler<HTMLInputElement>;
-	inputType?: HTMLInputTypeAttribute;
-	inputStyle?: string;
+	value?: string;
+	onChange?: ChangeEventHandler<HTMLInputElement>;
+	type?: HTMLInputTypeAttribute;
+	style?: string;
 	divider?: boolean;
 }
 
 const LabelledInput: FC<Props> = ({
 	label,
-	inputValue,
-	onInputChange,
-	inputType,
-	inputStyle,
+	value,
+	onChange,
+	type,
+	style,
 	divider
 }) => {
 	return (
@@ -22,10 +22,10 @@ const LabelledInput: FC<Props> = ({
 			<label className="text-default">{label}</label>
 			<br />
 			<input
-				type={inputType}
-				value={inputValue}
-				onChange={onInputChange}
-				className={`${inputStyle ? `${inputStyle} ` : ""}text-input`}
+				type={type}
+				value={value}
+				onChange={onChange}
+				className={`${style ? `${style} ` : ""}text-input`}
 			/>
 			{divider && <div className="h-4"></div>}
 		</div>

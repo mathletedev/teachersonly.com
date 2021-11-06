@@ -23,8 +23,16 @@ export class User {
 	public password: string;
 
 	@Field()
-	@Property()
-	public displayName?: string;
+	@Property({ default: "" })
+	public displayName: string;
+
+	@Field()
+	@Property({ default: "" })
+	public status: string;
+
+	@Field()
+	@Property({ required: true, default: 0 })
+	public flair: number;
 
 	@Field()
 	@Property({ required: true, default: false })

@@ -76,26 +76,26 @@ const Welcome: FC = () => {
 			>
 				<LabelledInput
 					label={`username${showEmail ? "" : " or email"}`}
-					inputValue={username}
-					onInputChange={(e) => setUsername(e.target.value)}
-					inputStyle="w-full bg-indigo-50"
+					value={username}
+					onChange={(e) => setUsername(e.target.value)}
+					style="w-full bg-indigo-50"
 					divider
 				/>
 				{showEmail && (
 					<LabelledInput
 						label="email"
-						inputValue={email}
-						onInputChange={(e) => setEmail(e.target.value)}
-						inputStyle="w-full bg-indigo-50"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						style="w-full bg-indigo-50"
 						divider
 					/>
 				)}
 				<LabelledInput
 					label="password"
-					inputValue={password}
-					onInputChange={(e) => setPassword(e.target.value)}
-					inputType="password"
-					inputStyle="w-full bg-indigo-50"
+					value={password}
+					onChange={(e) => setPassword(e.target.value)}
+					type="password"
+					style="w-full bg-indigo-50"
 				/>
 				<div className="h-8"></div>
 				<button type="submit" className="w-full text-button">

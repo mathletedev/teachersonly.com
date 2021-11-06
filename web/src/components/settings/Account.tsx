@@ -6,7 +6,7 @@ const Account: FC = () => {
 		<Fragment>
 			<LabelledInput label="username" divider />
 			<LabelledInput label="email" divider />
-			<LabelledInput label="password" inputType="password" />
+			<LabelledInput label="password" type="password" />
 		</Fragment>
 	);
 };
