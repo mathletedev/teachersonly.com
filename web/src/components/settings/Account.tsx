@@ -4,9 +4,15 @@ import LabelledInput from "../common/LabelledInput";
 const Account: FC = () => {
 	return (
 		<Fragment>
-			<LabelledInput label="username" divider />
-			<LabelledInput label="email" divider />
-			<LabelledInput label="password" type="password" />
+			<LabelledInput label="username" divider>
+				<input className="text-input" />
+			</LabelledInput>
+			<LabelledInput label="email" divider>
+				<input className="text-input" />
+			</LabelledInput>
+			<LabelledInput label="password">
+				<input type="password" className="text-input" />
+			</LabelledInput>
 		</Fragment>
 	);
 };
