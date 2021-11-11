@@ -72,9 +72,9 @@ const Profile: FC = () => {
 					/>
 					<div
 						onClick={() => uploader.current?.click()}
-						className="h-64 w-64 rounded cursor-pointer"
+						className="h-64 w-64 rounded-full cursor-pointer"
 					>
-						<img src={settings.image} className="h-full w-full rounded" />
+						<img src={settings.image} className="h-full w-full profile-image" />
 					</div>
 				</LabelledInput>
 				<LabelledInput label="display name" divider>

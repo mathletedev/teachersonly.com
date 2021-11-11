@@ -22,6 +22,9 @@ export class User {
 	@Property({ required: true })
 	public password: string;
 
+	@Property({ type: () => [ObjectId], required: true, default: [] })
+	public likes: ObjectId[];
+
 	@Field()
 	@Property({
 		required: true,

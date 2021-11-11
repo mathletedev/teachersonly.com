@@ -97,3 +97,11 @@
 
 	@apply dark:text-gray-400;
 }
+
+.profile-image {
+	@apply rounded-full;
+	@apply border-2;
+	@apply border-gray-500;
+
+	@apply dark:border-gray-400;
+}

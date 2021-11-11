@@ -8,6 +8,11 @@ import { Context } from "../lib/types";
 
 @Resolver()
 export class UserResolver {
+	@Query(() => User, { nullable: true })
+	public async getUserByUsername(@Arg("username") username: string) {
+		return await UserModel.findOne({ username });
+	}
+
 	@Mutation(() => String, { nullable: true })
 	public async register(
 		@Arg("username") username: string,
@@ -102,6 +107,49 @@ export class UserResolver {
 		Object.assign(user, parsed);
 		await user.save();
 
+		return true;
+	}
+
+	@Query(() => Boolean)
+	public async likes(
+		@Arg("username") username: string,
+		@Ctx() { req }: Context
+	) {
+		if (!req.userId) return false;
+
+		const user = await UserModel.findById(req.userId);
+		if (!user) return false;
+
+		const likesUser = await UserModel.findOne({ username });
+		if (!likesUser) return false;
+
+		if (user.likes.includes(likesUser._id)) return true;
+		return false;
+	}
+
+	@Mutation(() => Boolean)
+	public async toggleLike(
+		@Arg("username") username: string,
+		@Arg("likes") likes: boolean,
+		@Ctx() { req }: Context
+	) {
+		if (!req.userId) return false;
+
+		const user = await UserModel.findById(req.userId);
+		if (!user) return false;
+
+		const likesUser = await UserModel.findOne({ username });
+		if (!likesUser || user._id === likesUser._id) return false;
+
+		if (likes) {
+			user.likes.push(likesUser._id);
+		} else {
+			user.likes = user.likes.filter(
+				(id) => id.toString() !== likesUser._id.toString()
+			);
+		}
+
+		await user.save();
 		return true;
 	}
 }

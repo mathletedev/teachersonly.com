@@ -23,7 +23,7 @@ const Layout: FC = ({ children }) => {
 	const { data, loading } = useQuery(QUERY_ME_DARK_MODE);
 	const [logout] = useMutation(MUTATION_LOGOUT);
 
-	const router = useRouter();
+	const { pathname } = useRouter();
 
 	const navRef = useRef<HTMLElement>(null);
 	const [navHeight, setNavHeight] = useState(0);
@@ -31,7 +31,7 @@ const Layout: FC = ({ children }) => {
 	useEffect(() => {
 		if (!data) return;
 
-		if (!data.me && router.pathname !== "/") window.location.replace("/");
+		if (!data.me && pathname !== "/") window.location.replace("/");
 	}, [data]);
 
 	useEffect(() => {
