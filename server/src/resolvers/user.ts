@@ -127,6 +127,23 @@ export class UserResolver {
 		return false;
 	}
 
+	@Query(() => Boolean)
+	public async isLiked(
+		@Arg("username") username: string,
+		@Ctx() { req }: Context
+	) {
+		if (!req.userId) return false;
+
+		const user = await UserModel.findById(req.userId);
+		if (!user) return false;
+
+		const likesUser = await UserModel.findOne({ username });
+		if (!likesUser) return false;
+
+		if (likesUser.likes.includes(user._id)) return true;
+		return false;
+	}
+
 	@Mutation(() => Boolean)
 	public async toggleLike(
 		@Arg("username") username: string,

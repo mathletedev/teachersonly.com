@@ -23,6 +23,8 @@ const QUERY_USER = gql`
 
 		likes(username: $username)
 
+		isLiked(username: $username)
+
 		me {
 			username
 		}
@@ -52,6 +54,7 @@ const User: FC = () => {
 
 	const [user, setUser] = useState<UserData>({});
 	const [likes, setLikes] = useState(false);
+	const [liked, setLiked] = useState(false);
 	const [me, setMe] = useState<MeData>({});
 
 	useEffect(() => {
@@ -63,6 +66,7 @@ const User: FC = () => {
 
 		setUser(data.getUserByUsername);
 		setLikes(data.likes);
+		setLiked(data.isLiked);
 		setMe(data.me);
 	}, [data]);
 
@@ -79,21 +83,31 @@ const User: FC = () => {
 						{user.status}
 					</div>
 					{user.username !== me.username && (
-						<button
-							onClick={async () => {
-								await toggleLike({
-									variables: { username: user.username, likes: !likes }
-								});
+						<div className="flex">
+							<button
+								onClick={async () => {
+									await toggleLike({
+										variables: { username: user.username, likes: !likes }
+									});
 
-								setLikes(!likes);
-							}}
-						>
-							{likes ? (
-								<HeartIcon className="h-8 w-8 text-red-500 dark:text-red-400" />
-							) : (
-								<HeartIcon className="h-8 w-8 text-gray-500 dark:text-gray-400" />
-							)}
-						</button>
+									setLikes(!likes);
+								}}
+								className="flex-item pr-4"
+							>
+								{likes ? (
+									<HeartIcon className="h-8 w-8 text-red-500 transition hover:text-red-600 dark:text-red-400 dark:hover:text-red-300" />
+								) : (
+									<HeartIcon className="h-8 w-8 text-gray-500 transition hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300" />
+								)}
+							</button>
+							<div className="flex-item">
+								{liked ? (
+									<HeartIcon className="h-8 w-8 text-blue-500 dark:text-blue-400" />
+								) : (
+									<HeartIcon className="h-8 w-8 text-gray-500 dark:text-gray-400" />
+								)}
+							</div>
+						</div>
 					)}
 				</div>
 			</div>
